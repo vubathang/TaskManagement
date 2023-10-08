@@ -8,7 +8,11 @@ namespace TaskManager
         {
             InitializeComponent();
         }
-
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            ResourceManager resourceManager = new ResourceManager();
+            resourceManager.loadProcessList();
+        }
         #region #1 Thang
         private void CreateNewProcess()
         {
@@ -60,6 +64,5 @@ namespace TaskManager
             }
         }
         #endregion
-
     }
 }
