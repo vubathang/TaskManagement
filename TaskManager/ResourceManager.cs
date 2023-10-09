@@ -13,41 +13,9 @@ namespace TaskManager
     internal class ResourceManager
     {
         [DllImport("kernel32.dll")]
-        static extern bool CreateProcess(string lpApplicationName, string lpCommandLine, IntPtr lpProcessAttributes, IntPtr lpThreadAttributes, bool bInheritHandles,
-         uint dwCreationFlags, IntPtr lpEnvironment, string lpCurrentDirectory, [In] ref STARTUPINFOA lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
-        // Hàm tạo một quy trình mới
+        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct PROCESS_INFORMATION //Cấu trúc chứa thông tin về một quy trình
-        {
-            public IntPtr hProcess;//con tro toi tien trinh
-            public IntPtr hThread;
-            public int dwProcessId;//ID quy trình
-            public int dwThreadId;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public struct STARTUPINFOA //Cấu trúc chứa thông tin về cách một quy trình mới được khởi động
-        {
-            public int cb;
-            public string lpReserved;
-            public string lpDesktop;//môi trường làm việc
-            public string lpTitle;
-            public uint dwX;
-            public uint dwY;
-            public uint dwXSize;//kthuoc cửa sổ
-            public uint dwYSize;
-            public uint dwXCountChars;
-            public uint dwYCountChars;
-            public uint dwFillAttribute;
-            public uint dwFlags;
-            public short wShowWindow;
-            public short cbReserved2;
-            public IntPtr lpReserved2;
-            public IntPtr hStdInput;
-            public IntPtr hStdOutput;
-            public IntPtr hStdError;
-        }
+        #region Performance RAM
         [StructLayout(LayoutKind.Sequential)]
         public struct MEMORYSTATUSEX
         {
@@ -65,80 +33,28 @@ namespace TaskManager
         [DllImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);//hàm lấy thông tin về hiệu suất RAM và
-                                                                             //tính toán tỷ lệ sử dụng RAM dựa trên thông tin thu thập được
-                                                                             // for TerminateProcess
+                                                                                    //tính toán tỷ lệ sử dụng RAM dựa trên thông tin thu thập được
+                                                                                    // for TerminateProcess
+        #endregion
+
+        #region Terminate Process
         public const int PROCESS_TERMINATE = 0x0001;
         [DllImport("kernel32.dll")]
         public static extern bool TerminateProcess(IntPtr hProcess, uint uExitCode);//Hàm chấm dứt một quy trình đã tồn tại
 
+        #endregion
+
         #region EnumProcess
         [DllImport("psapi.dll")]
-        static extern bool EnumProcesses(int[] processIds, int size, out int bytesReturned);
-
-        public void loadProcessList()
-        {
-            Process[] processes;
-            processes = Process.GetProcesses();
-            foreach (Process process in processes)
-            {
-                Console.WriteLine("ID: {0} - Name: {1}", process.Id, process.ProcessName);
-            }
-        }
-
-        public List<Process> EnumProcesses()
-        {
-            List<Process> processList = new List<Process>();
-            int[] processIds = new int[1024];
-            int bytesReturned;
-
-            if (EnumProcesses(processIds, processIds.Length * 4, out bytesReturned))
-            {
-                for (int i = 0; i < bytesReturned / 4; i++)
-                {
-                    try
-                    {
-                        Process process = Process.GetProcessById(processIds[i]);
-                        processList.Add(process);
-                    }
-                    catch (ArgumentException) { }
-                }
-            }
-            return processList;
-        }
+        public static extern bool EnumProcesses(int[] processIds, int size, out int bytesReturned);
         #endregion
 
         #region SetProcessPriority
         [DllImport("kernel32.dll")]
-        static extern bool SetPriorityClass(IntPtr hProcess, uint dwPriorityClass);
+        public static extern bool SetPriorityClass(IntPtr hProcess, uint dwPriorityClass);
 
-        public bool setProcessPriority(IntPtr processHandle, string priority)
-        {
-            bool success = false;
-            switch (priority)
-            {
-                case "Realtime":
-                    success = SetPriorityClass(processHandle, 0x00000100);
-                    break;
-                case "High":
-                    success = SetPriorityClass(processHandle, 0x00000080);
-                    break;
-                case "AboveNormal":
-                    success = SetPriorityClass(processHandle, 0x00008000);
-                    break;
-                case "Normal":
-                    success = SetPriorityClass(processHandle, 0x00000020);
-                    break;
-                case "BelowNormal":
-                    success = SetPriorityClass(processHandle, 0x00004000);
-                    break;
-                case "Low":
-                    success = SetPriorityClass(processHandle, 0x00000040);
-                    break;
-                case "Idle":
-                    success = SetPriorityClass(processHandle, 0x00000010);
-                    break;
-            }
-            return success;
+        #endregion
+
         #region Create Process
 
         // Import hàm Process từ thư viện kernel32.dll
