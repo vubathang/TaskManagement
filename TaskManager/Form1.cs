@@ -6,29 +6,18 @@ namespace TaskManager
 {
     public partial class Form1 : Form
     {
-        public Form1()
-        {
-            InitializeComponent();
-            //Console.WriteLine("Nhap process ID : ");
-            //int x = Convert.ToInt32(Console.ReadLine());
-            loadProcessList();
-            int x = Convert.ToInt32(Console.ReadLine());
-            TerminateProcessById(x);
-            //CreateNewProcess();
-        }
-
         #region #1 Thang
         private void CreateNewProcess()
         {
             STARTUPINFO startupInfo = new STARTUPINFO();
             PROCESS_INFORMATION processInfo = new PROCESS_INFORMATION();
 
-            string applicationName = "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2307.27.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe";
-            string commandLine = null;
+            string applicationName = txtName.Text;
+            //string commandLine = null;
 
             bool success = CreateProcess(
                 applicationName,
-                commandLine,
+                null,
                 IntPtr.Zero,
                 IntPtr.Zero,
                 false,
@@ -39,13 +28,14 @@ namespace TaskManager
                 out processInfo);
             if (success)
             {
-                Console.WriteLine($"Create Success ({processInfo.hProcess})");
+                MessageBox.Show($"Create Success ({processInfo.hProcess})");
             }
             else
             {
-                Console.WriteLine("Fail!!!");
+                MessageBox.Show("Fail!!!");
             }
         }
+
         private void DisplayPerformanceCPU()
         {
             FILETIME idleTime, kernelTime, userTime;
@@ -60,11 +50,11 @@ namespace TaskManager
                 ulong totalTime = kernelTime64 + userTime64;
                 double cpuUsage = (1.0 - (double)idleTime64 / totalTime) * 100.0;
 
-                Console.WriteLine($"CPU Usage: {cpuUsage}%");
+                MessageBox.Show($"CPU Usage: {cpuUsage}%", "CPU");
             }
             else
             {
-                Console.WriteLine("Failed to retrieve CPU usage.");
+                MessageBox.Show("Failed to retrieve CPU usage.");
             }
         }
         #endregion
@@ -106,7 +96,7 @@ namespace TaskManager
             processes = Process.GetProcesses();
             foreach (Process process in processes)
             {
-                Console.WriteLine("ID: {0} - Name: {1}", process.Id, process.ProcessName);
+                dataGridView1.Rows.Add(process.Id, process.ProcessName);
             }
         }
 
@@ -143,21 +133,21 @@ namespace TaskManager
                     bool terminated = TerminateProcess(processHandle, 0);
                     if (terminated)
                     {
-                        Console.WriteLine("Tiến trình kết thúc thành công.");
+                        MessageBox.Show("Tiến trình kết thúc thành công.");
                     }
                     else
                     {
-                        Console.WriteLine("Không thể kết thúc tiến trình.");
+                        MessageBox.Show("Không thể kết thúc tiến trình.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Không thể mở tiến trình.");
+                    MessageBox.Show("Không thể mở tiến trình.");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Lỗi: " + ex.Message);
+                MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
 
@@ -169,20 +159,162 @@ namespace TaskManager
 
             if (GlobalMemoryStatusEx(ref memoryStatus)) //dwLength đã được thiết lập, biến memoryStatus sẵn sàng để được truyền vào hàm GlobalMemoryStatusEx để lấy thông tin về hiệu suất RAM
             {
-                Console.WriteLine($"Total Physical Memory: {memoryStatus.ullTotalPhys / (1024 * 1024)} MB");
-                Console.WriteLine($"Available Physical Memory: {memoryStatus.ullAvailPhys / (1024 * 1024)} MB");
-                Console.WriteLine($"Total Page File: {memoryStatus.ullTotalPageFile / (1024 * 1024)} MB");
-                Console.WriteLine($"Available Page File: {memoryStatus.ullAvailPageFile / (1024 * 1024)} MB");
-                Console.WriteLine($"Total Virtual Memory: {memoryStatus.ullTotalVirtual / (1024 * 1024)} MB");
-                Console.WriteLine($"Available Virtual Memory: {memoryStatus.ullAvailVirtual / (1024 * 1024)} MB");
-                Console.WriteLine($"Available Extended Virtual Memory: {memoryStatus.ullAvailExtendedVirtual / (1024 * 1024)} MB");
+                string message = $"Total Physical Memory: {memoryStatus.ullTotalPhys / (1024 * 1024)} MB\n" +
+                 $"Available Physical Memory: {memoryStatus.ullAvailPhys / (1024 * 1024)} MB\n" +
+                 $"Total Page File: {memoryStatus.ullTotalPageFile / (1024 * 1024)} MB\n" +
+                 $"Available Page File: {memoryStatus.ullAvailPageFile / (1024 * 1024)} MB\n" +
+                 $"Total Virtual Memory: {memoryStatus.ullTotalVirtual / (1024 * 1024)} MB\n" +
+                 $"Available Virtual Memory: {memoryStatus.ullAvailVirtual / (1024 * 1024)} MB\n" +
+                 $"Available Extended Virtual Memory: {memoryStatus.ullAvailExtendedVirtual / (1024 * 1024)} MB";
+
+                MessageBox.Show(message, "Memory");
+
             }
             else
             {
-                Console.WriteLine("Failed to retrieve memory status.");
+                MessageBox.Show("Failed to retrieve memory status.");
+            }
+        }
+        #endregion
+
+        #region #4 Toan
+        private string ShowDiskInfo(string driveName)
+        {
+            ulong freeBytesAvailable;
+            ulong totalNumberOfBytes;
+            ulong totalNumberOfFreeBytes;
+
+            bool success = GetDiskFreeSpaceEx(driveName,
+                out freeBytesAvailable,
+                out totalNumberOfBytes,
+                out totalNumberOfFreeBytes);
+
+            if (success)
+            {
+                return string.Format("Dung lượng tổng của ổ {0}: {1} bytes\nDung lượng trống của ổ {0}: {2} bytes\nDung lượng sử dụng của ổ {0}: {3} bytes",
+                    driveName, totalNumberOfBytes, totalNumberOfFreeBytes, totalNumberOfBytes - totalNumberOfFreeBytes);
+            }
+            else
+            {
+                return string.Format("Không thể lấy thông số Disk của ổ {0}", driveName);
+            }
+        }
+        #endregion
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                List<Process> processList = EnumProcessesList();
+                foreach (Process process in processList)
+                {
+                    dataGridView1.Rows.Add(process.Id, process.ProcessName);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Lỗi");
+            };
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dataGridView1.SelectedRows.Count > 0)
+                {
+                    int processId = (int)dataGridView1.SelectedRows[0].Cells[0].Value;
+                    IntPtr processHandle = OpenProcess(PROCESS_TERMINATE, false, processId);
+                    if (processHandle != IntPtr.Zero)
+                    {
+                        comboBox1.SelectedItem = Process.GetProcessById(processId).PriorityClass.ToString();
+                    }
+                }
+            }
+            catch (Exception) { }
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            STARTUPINFOA si = new STARTUPINFOA();
+            si.cb = Marshal.SizeOf(si);
+            PROCESS_INFORMATION pi;
+            CreateProcessA(null, txtName.Text, IntPtr.Zero, IntPtr.Zero, false, 0, IntPtr.Zero, null, ref si, out pi);
+            dataGridView1.Rows.Add(pi.dwProcessId, txtName.Text);
+        }
+
+        private void btnEnd_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                int processId = (int)dataGridView1.SelectedRows[0].Cells[0].Value;
+                TerminateProcessById(processId);
+                dataGridView1.Rows.Clear();
+                loadProcessList();
             }
         }
 
-        #endregion
+        private void btnPriority_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                int processId = (int)dataGridView1.SelectedRows[0].Cells[0].Value;
+                IntPtr processHandle = OpenProcess(PROCESS_TERMINATE, false, processId);
+                if (processHandle != IntPtr.Zero)
+                {
+                    bool success = setProcessPriority(processHandle, comboBox1.Text);
+                    if (!success)
+                    {
+                        // Lấy mã lỗi từ GetLastError
+                        int errorCode = Marshal.GetLastWin32Error();
+                        MessageBox.Show($"Không thể thay đổi priority. Mã lỗi: {errorCode}");
+                    }
+                    else
+                    {
+                        dataGridView1.Rows.Clear();
+                        loadProcessList();
+                    }
+                }
+            }
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            Process[] processes;
+            dataGridView1.Rows.Clear();
+            processes = Process.GetProcesses();
+            foreach (Process process in processes)
+            {
+                if (process.Id.ToString().Contains(txtSearch.Text) || process.ProcessName.Contains(txtSearch.Text))
+                {
+                    dataGridView1.Rows.Add(process.Id, process.ProcessName);
+                }
+            }
+            if (txtSearch.Text == "")
+            {
+                dataGridView1.Rows.Clear();
+                loadProcessList();
+            }
+        }
+
+        private void btnCPU_Click(object sender, EventArgs e)
+        {
+            DisplayPerformanceCPU();
+        }
+
+        private void btnMemory_Click(object sender, EventArgs e)
+        {
+            GetMemoryStatus();
+        }
+
+        private void btnDisk_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(ShowDiskInfo("C:\\"), "Thông số Disk");
+        }
     }
 }

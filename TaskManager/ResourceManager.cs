@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace TaskManager
@@ -103,12 +102,42 @@ namespace TaskManager
              */
         }
 
+        #endregion
+
+        #region Create Process A
+        [DllImport("kernel32.dll")]
+        public static extern bool CreateProcessA(string lpApplicationName, string lpCommandLine, IntPtr lpProcessAttributes, IntPtr lpThreadAttributes, bool bInheritHandles, uint dwCreationFlags, IntPtr lpEnvironment, string lpCurrentDirectory, [In] ref STARTUPINFOA lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
+
+        [StructLayout(LayoutKind.Sequential)]
         public struct PROCESS_INFORMATION
         {
-            public IntPtr hProcess; // Con trỏ trỏ tới tiến trình
-            public IntPtr hThread;  // Con trỏ trỏ tới luồng
-            public uint dwProcessId;// PID
-            public uint dwThreadId; // TID
+            public IntPtr hProcess;
+            public IntPtr hThread;
+            public int dwProcessId;
+            public int dwThreadId;
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public struct STARTUPINFOA
+        {
+            public int cb;
+            public string lpReserved;
+            public string lpDesktop;
+            public string lpTitle;
+            public uint dwX;
+            public uint dwY;
+            public uint dwXSize;
+            public uint dwYSize;
+            public uint dwXCountChars;
+            public uint dwYCountChars;
+            public uint dwFillAttribute;
+            public uint dwFlags;
+            public short wShowWindow;
+            public short cbReserved2;
+            public IntPtr lpReserved2;
+            public IntPtr hStdInput;
+            public IntPtr hStdOutput;
+            public IntPtr hStdError;
         }
         #endregion
 
@@ -134,5 +163,13 @@ namespace TaskManager
         }
         #endregion
 
+        #region Get Disk Free Space
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
+           out ulong lpFreeBytesAvailable,
+           out ulong lpTotalNumberOfBytes,
+           out ulong lpTotalNumberOfFreeBytes);
+        #endregion
     }
 }
