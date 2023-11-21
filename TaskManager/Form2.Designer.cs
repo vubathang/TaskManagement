@@ -39,13 +39,16 @@
             btnReset = new Button();
             btnRun = new Button();
             label2 = new Label();
-            progressBar1 = new ProgressBar();
             label3 = new Label();
             label4 = new Label();
             label5 = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
+            txtAvgWaitingTime = new TextBox();
+            txtAvgTurnAroundTime = new TextBox();
+            pnlTurnAroundTime = new Panel();
+            nupQuantum = new NumericUpDown();
+            label6 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nupQuantum).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -153,13 +156,6 @@
             label2.TabIndex = 4;
             label2.Text = "Gantt Chart";
             // 
-            // progressBar1
-            // 
-            progressBar1.Location = new Point(86, 385);
-            progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(754, 51);
-            progressBar1.TabIndex = 5;
-            // 
             // label3
             // 
             label3.AutoSize = true;
@@ -190,28 +186,59 @@
             label5.TabIndex = 4;
             label5.Text = "Average Stay in CPU Time : ";
             // 
-            // textBox1
+            // txtAvgWaitingTime
             // 
-            textBox1.Location = new Point(331, 501);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(158, 27);
-            textBox1.TabIndex = 6;
+            txtAvgWaitingTime.Location = new Point(331, 501);
+            txtAvgWaitingTime.Name = "txtAvgWaitingTime";
+            txtAvgWaitingTime.ReadOnly = true;
+            txtAvgWaitingTime.Size = new Size(158, 27);
+            txtAvgWaitingTime.TabIndex = 6;
             // 
-            // textBox2
+            // txtAvgTurnAroundTime
             // 
-            textBox2.Location = new Point(331, 542);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(158, 27);
-            textBox2.TabIndex = 6;
+            txtAvgTurnAroundTime.Location = new Point(331, 542);
+            txtAvgTurnAroundTime.Name = "txtAvgTurnAroundTime";
+            txtAvgTurnAroundTime.ReadOnly = true;
+            txtAvgTurnAroundTime.Size = new Size(158, 27);
+            txtAvgTurnAroundTime.TabIndex = 6;
+            // 
+            // pnlTurnAroundTime
+            // 
+            pnlTurnAroundTime.AutoScroll = true;
+            pnlTurnAroundTime.BorderStyle = BorderStyle.FixedSingle;
+            pnlTurnAroundTime.Location = new Point(55, 367);
+            pnlTurnAroundTime.Name = "pnlTurnAroundTime";
+            pnlTurnAroundTime.Size = new Size(840, 95);
+            pnlTurnAroundTime.TabIndex = 7;
+            // 
+            // nupQuantum
+            // 
+            nupQuantum.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            nupQuantum.Location = new Point(180, 190);
+            nupQuantum.Name = "nupQuantum";
+            nupQuantum.Size = new Size(57, 30);
+            nupQuantum.TabIndex = 8;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            label6.Location = new Point(87, 197);
+            label6.Name = "label6";
+            label6.Size = new Size(83, 23);
+            label6.TabIndex = 9;
+            label6.Text = "Quantum";
             // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(947, 594);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
-            Controls.Add(progressBar1);
+            Controls.Add(label6);
+            Controls.Add(nupQuantum);
+            Controls.Add(pnlTurnAroundTime);
+            Controls.Add(txtAvgTurnAroundTime);
+            Controls.Add(txtAvgWaitingTime);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -227,6 +254,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Scheduling Algorithm";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nupQuantum).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -241,14 +269,16 @@
         private Button btnReset;
         private Button btnRun;
         private Label label2;
-        private ProgressBar progressBar1;
         private Label label3;
         private Label label4;
         private Label label5;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox txtAvgWaitingTime;
+        private TextBox txtAvgTurnAroundTime;
         private DataGridViewTextBoxColumn PID;
         private DataGridViewTextBoxColumn ArrivalTime;
         private DataGridViewTextBoxColumn BurstTime;
+        private Panel pnlTurnAroundTime;
+        private NumericUpDown nupQuantum;
+        private Label label6;
     }
 }
