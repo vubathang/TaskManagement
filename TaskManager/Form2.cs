@@ -31,6 +31,7 @@ namespace TaskManager
                 this.id = id;
                 this.arrivalTime = arrivalTime;
                 this.burstTime = burstTime;
+                this.remainingTime = burstTime;
                 Random rand = new Random();
                 this.color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
             }
@@ -98,7 +99,7 @@ namespace TaskManager
                     break;
                 //RR
                 case 1:
-                    // RR();
+                    RR();
                     break;
                 //SJF
                 case 2:
@@ -106,7 +107,7 @@ namespace TaskManager
                     break;
                 //SRTN
                 case 3:
-                    SRTN();
+                    //SRTN();
                     break;
             }
             DisplayProcesses();
@@ -183,50 +184,84 @@ namespace TaskManager
             }
         }
 
-        private void SRTN()
+        private void RR()
         {
             init();
-            //while (true)
-            //{
-            //    double min = Double.PositiveInfinity;
-            //    int index = -1;
-            //    int count
-            //    foreach (Process process in processes)
-            //    {
-            //        if (process.burstTime > 0 && process.burstTime < min)
-            //        {
-            //            index = process.id;
-            //            min = process.burstTime;
-            //        }
-            //    }
-            //    if ()
-            //}
+            int timeCount = 0;
+            int quantity = processes.Count;
+            int pr = 0;
+            while (timeCount < 20)
+            {
+                int i = 0;
+                if (processes[pr].burstTime == 0)
+                {
+                    i = 0;
+                    pr++;
+                }
+                else if (i == 2)
+                {
+                    i = 0;
+                }
+                else {
+                    i++;
+                } ;
+
+                pr = pr % quantity;
+                processes[pr].useCpu();
+                
+                cpu.Add(pr);
+                timeCount++;
+            }
 
         }
 
         // Draw Gantt Chart
         private void DisplayProcesses()
         {
+            //pnlTurnAroundTime.Controls.Clear();
+
+            //int panelWidth = 20;
+            //int height = pnlTurnAroundTime.Height - 5;
+
+            //for (int i = 0; i < cpu.Count; i++)
+            //{
+            //    int index = cpu[i];
+            //    Label processLabel = new Label
+            //    {
+            //        Size = new Size(panelWidth, height),
+            //        Text = $"{processes[index].id}",
+            //        Font = new Font("Arial", 10),
+            //        ForeColor = Color.Black,
+            //        BackColor = processes[index].color,
+            //        TextAlign = ContentAlignment.MiddleCenter,
+            //        //Dock = DockStyle.Right
+            //    };
+
+            //    pnlTurnAroundTime.Controls.Add(processLabel);
+            //}
             pnlTurnAroundTime.Controls.Clear();
 
-            int panelWidth = 20;
-            int height = pnlTurnAroundTime.Height - 5;
-
-            for (int i = 0; i < cpu.Count; i++)
+            int x = 0;
+            int y = 0;
+            int height = 60;
+            foreach (int i in cpu)
             {
-                int index = cpu[i];
-                Label processLabel = new Label
-                {
-                    Size = new Size(panelWidth, height),
-                    Text = $"{processes[index].id}",
-                    Font = new Font("Arial", 10),
-                    ForeColor = Color.Black,
-                    BackColor = processes[index].color,
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    //Dock = DockStyle.Right
-                };
+                Panel processPanel = new Panel();
+                processPanel.Location = new Point(x, y);
+                processPanel.Size = new Size(40, height);
+                processPanel.BackColor = processes[i].color;
 
-                pnlTurnAroundTime.Controls.Add(processLabel);
+                Label processLabel = new Label();
+                processLabel.Text = $"P{processes[i].id}";
+                processLabel.Font = new Font("Arial", 10);
+                processLabel.ForeColor = Color.Black;
+                processLabel.TextAlign = ContentAlignment.MiddleCenter;
+                processLabel.Dock = DockStyle.Fill;
+
+                processPanel.Controls.Add(processLabel);
+                pnlTurnAroundTime.Controls.Add(processPanel);
+
+                x += 40;
             }
         }
     }
