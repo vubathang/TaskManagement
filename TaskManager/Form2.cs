@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,8 @@ namespace TaskManager
 {
     public partial class Form2 : Form
     {
+        List<Process> processes = new List<Process>();
+        List<int> cpu = new List<int>();
         public class Process
         {
             public int id { get; set; }
@@ -23,10 +26,17 @@ namespace TaskManager
             public int endTime { get; set; }
             public Color color { get; set; }
 
-            public Process()
+            public Process(int id, int arrivalTime, int burstTime)
             {
+                this.id = id;
+                this.arrivalTime = arrivalTime;
+                this.burstTime = burstTime;
                 Random rand = new Random();
                 this.color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
+            }
+            public void useCpu()
+            {
+                this.burstTime--;
             }
         }
 
@@ -77,6 +87,7 @@ namespace TaskManager
 
         private void btnRun_Click(object sender, EventArgs e)
         {
+            //init();
             int choose = cbAlgorithm.SelectedIndex;
 
             switch (choose)
@@ -95,80 +106,127 @@ namespace TaskManager
                     break;
                 //SRTN
                 case 3:
-                    // SRTN();
+                    SRTN();
                     break;
             }
+            DisplayProcesses();
         }
 
         // FCFS Algorithm
+        //private void FCFS()
+        //{
+        //    List<Process> processes = new List<Process>();
+        //    int count = dataGridView1.Rows.Count;
+
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        Process process = new Process();
+        //        process.id = i + 1;
+        //        process.arrivalTime = Convert.ToInt32(dataGridView1.Rows[i].Cells[1].Value);
+        //        process.burstTime = Convert.ToInt32(dataGridView1.Rows[i].Cells[2].Value);
+        //        process.remainingTime = process.burstTime;
+        //        processes.Add(process);
+        //    }
+
+        //    processes = processes.OrderBy(process => process.arrivalTime).ToList();
+
+        //    int time = 0;
+        //    int totalWaitingTime = 0;
+        //    int averageWaitingTime = 0;
+        //    int totalTurnAroundTime = 0;
+        //    int averageTurnAroundTime = 0;
+
+        //    foreach (Process process in processes)
+        //    {
+        //        process.waitingTime = time - process.arrivalTime;
+        //        totalWaitingTime += process.waitingTime;
+        //        time += process.burstTime;
+        //        process.turnAroundTime = process.waitingTime + process.burstTime;
+        //        totalTurnAroundTime += process.turnAroundTime;
+        //    }
+
+        //    averageWaitingTime = totalWaitingTime / count;
+        //    averageTurnAroundTime = totalTurnAroundTime / count;
+
+        //    txtAvgWaitingTime.Text = averageWaitingTime.ToString();
+        //    txtAvgTurnAroundTime.Text = averageTurnAroundTime.ToString();
+
+        //    DisplayProcesses(processes);
+        //}
+
+
+        private void init()
+        {
+            for(int i = 0; i < dataGridView1.Rows.Count;i++)
+            {
+                DataGridViewRow row = dataGridView1.Rows[i];
+                int id = Convert.ToInt32(row.Cells[0].Value);
+                int arrivalTime = Convert.ToInt32(row.Cells[1].Value);
+                int burstTime = Convert.ToInt32(row.Cells[2].Value);
+                processes.Add(new Process(id, arrivalTime, burstTime));
+            }
+        }
+
         private void FCFS()
         {
-            List<Process> processes = new List<Process>();
-            int count = dataGridView1.Rows.Count;
-
-            for (int i = 0; i < count; i++)
+            init();
+            int timeCount = 0;
+            int pr = 0;
+            int quantity = processes.Count;
+            while (true)
             {
-                Process process = new Process();
-                process.id = i + 1;
-                process.arrivalTime = Convert.ToInt32(dataGridView1.Rows[i].Cells[1].Value);
-                process.burstTime = Convert.ToInt32(dataGridView1.Rows[i].Cells[2].Value);
-                process.remainingTime = process.burstTime;
-                processes.Add(process);
+                if (processes[pr].burstTime == 0) pr++;
+                if (pr == quantity) break;
+                processes[pr].useCpu();
+                cpu.Add(pr);
+                timeCount++;
             }
+        }
 
-            processes = processes.OrderBy(process => process.arrivalTime).ToList();
+        private void SRTN()
+        {
+            init();
+            //while (true)
+            //{
+            //    double min = Double.PositiveInfinity;
+            //    int index = -1;
+            //    int count
+            //    foreach (Process process in processes)
+            //    {
+            //        if (process.burstTime > 0 && process.burstTime < min)
+            //        {
+            //            index = process.id;
+            //            min = process.burstTime;
+            //        }
+            //    }
+            //    if ()
+            //}
 
-            int time = 0;
-            int totalWaitingTime = 0;
-            int averageWaitingTime = 0;
-            int totalTurnAroundTime = 0;
-            int averageTurnAroundTime = 0;
-
-            foreach (Process process in processes)
-            {
-                process.waitingTime = time - process.arrivalTime;
-                totalWaitingTime += process.waitingTime;
-                time += process.burstTime;
-                process.turnAroundTime = process.waitingTime + process.burstTime;
-                totalTurnAroundTime += process.turnAroundTime;
-            }
-
-            averageWaitingTime = totalWaitingTime / count;
-            averageTurnAroundTime = totalTurnAroundTime / count;
-
-            txtAvgWaitingTime.Text = averageWaitingTime.ToString();
-            txtAvgTurnAroundTime.Text = averageTurnAroundTime.ToString();
-
-            DisplayProcesses(processes);
         }
 
         // Draw Gantt Chart
-        private void DisplayProcesses(List<Process> processes)
+        private void DisplayProcesses()
         {
             pnlTurnAroundTime.Controls.Clear();
 
-            int x = 0;
-            int y = 0;
-            int height = 60; 
+            int panelWidth = 20;
+            int height = pnlTurnAroundTime.Height - 5;
 
-            foreach (Process process in processes)
+            for (int i = 0; i < cpu.Count; i++)
             {
-                Panel processPanel = new Panel();
-                processPanel.Location = new Point(x, y);
-                processPanel.Size = new Size(process.burstTime * 40, height);
-                processPanel.BackColor = process.color;
+                int index = cpu[i];
+                Label processLabel = new Label
+                {
+                    Size = new Size(panelWidth, height),
+                    Text = $"{processes[index].id}",
+                    Font = new Font("Arial", 10),
+                    ForeColor = Color.Black,
+                    BackColor = processes[index].color,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    //Dock = DockStyle.Right
+                };
 
-                Label processLabel = new Label();
-                processLabel.Text = $"P{process.id}";
-                processLabel.Font = new Font("Arial", 10);
-                processLabel.ForeColor = Color.Black;
-                processLabel.TextAlign = ContentAlignment.MiddleCenter;
-                processLabel.Dock = DockStyle.Fill;
-
-                processPanel.Controls.Add(processLabel);
-                pnlTurnAroundTime.Controls.Add(processPanel);
-
-                x += process.burstTime * 40; 
+                pnlTurnAroundTime.Controls.Add(processLabel);
             }
         }
     }
