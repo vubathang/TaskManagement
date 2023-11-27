@@ -1,70 +1,58 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
+﻿using System.Data;
 
 namespace TaskManager
 {
     public partial class Form2 : Form
     {
-        List<Process> processes = new List<Process>();
-        List<int> cpu = new List<int>();
+        List<Process> processes = new();
+        readonly List<int> cpu = new();
         public class Process
         {
-            public int id { get; set; }
-            public int arrivalTime { get; set; }
-            public int burstTime { get; set; }
-            public int remainingTime { get; set; }
-            public int waitingTime { get; set; }
-            public int turnAroundTime { get; set; }
-            public int completedTime { get; set; }
-            public Color color { get; set; }
+            public int Id { get; set; }
+            public int ArrivalTime { get; set; }
+            public int BurstTime { get; set; }
+            public int RemainingTime { get; set; }
+            public int WaitingTime { get; set; }
+            public int TurnAroundTime { get; set; }
+            public int CompletedTime { get; set; }
+            public Color Color { get; set; }
 
             public Process(int id, int arrivalTime, int burstTime)
             {
-                this.id = id;
-                this.arrivalTime = arrivalTime;
-                this.burstTime = burstTime;
-                this.remainingTime = burstTime;
-                Random rand = new Random();
-                this.color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
+                Id = id;
+                ArrivalTime = arrivalTime;
+                BurstTime = burstTime;
+                RemainingTime = burstTime;
+                Random rand = new();
+                Color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
             }
-            public void useCpu()
+            public void UseCpu()
             {
-                this.remainingTime--;
+                RemainingTime--;
             }
-            public void end(int timeCount)
+            public void End(int timeCount)
             {
-                this.completedTime = timeCount;
-                calTurnAroundTime();
-                calWaitingTime();
+                CompletedTime = timeCount;
+                CalTurnAroundTime();
+                CalWaitingTime();
             }
-            public void calTurnAroundTime()
+            public void CalTurnAroundTime()
             {
-                this.turnAroundTime = this.completedTime - this.arrivalTime;
+                TurnAroundTime = CompletedTime - ArrivalTime;
             }
-            public void calWaitingTime()
+            public void CalWaitingTime()
             {
-                this.waitingTime = this.turnAroundTime - this.burstTime;
+                WaitingTime = TurnAroundTime - BurstTime;
             }
         }
 
         public Form2()
         {
             InitializeComponent();
-            renderCb();
+            RenderCb();
         }
 
-        private void renderCb()
+        private void RenderCb()
         {
             cbAlgorithm.Items.Add("FCFS");
             cbAlgorithm.Items.Add("RR");
@@ -76,7 +64,7 @@ namespace TaskManager
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            Random rand = new Random();
+            Random rand = new();
             int index = dataGridView1.Rows.Count + 1;
             int arrivalTime = rand.Next(1, 10);
             int burstTime = rand.Next(1, 10);
@@ -88,15 +76,14 @@ namespace TaskManager
             dataGridView1.Rows.Clear();
             dataGridView2.Rows.Clear();
             pnlTurnAroundTime.Controls.Clear();
-            txtAvgWaitingTime.Text = "";
-            //txtAvgTurnAroundTime.Text = "";
+            txtAvgWaitingTime.Clear();
             processes.Clear();
             cpu.Clear();
         }
 
         private void btnRun_Click(object sender, EventArgs e)
         {
-            init();
+            Init();
             int choose = cbAlgorithm.SelectedIndex;
             switch (choose)
             {
@@ -107,13 +94,9 @@ namespace TaskManager
                 //RR
                 case 1:
                     if (Convert.ToInt32(nupQuantum.Value) > 0)
-                    {
                         RR();
-                    }
                     else
-                    {
                         MessageBox.Show("Please input quantum", "Notification", MessageBoxButtons.OK);
-                    }
                     break;
                 //SJF
                 case 2:
@@ -124,10 +107,19 @@ namespace TaskManager
                     SRTN();
                     break;
             }
-            DisplayProcesses();
+            DisplayGanttChart();
             DisplayResult();
         }
-        private void init()
+
+        private void cbAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbAlgorithm.SelectedIndex == 1)
+                groupBox4.Show();
+            else
+                groupBox4.Hide();
+        }
+
+        private void Init()
         {
             processes.Clear();
             cpu.Clear();
@@ -140,7 +132,7 @@ namespace TaskManager
                 int burstTime = Convert.ToInt32(row.Cells[2].Value);
                 processes.Add(new Process(id, arrivalTime, burstTime));
             }
-            txtAvgWaitingTime.Text = "";
+            txtAvgWaitingTime.Clear();
         }
 
         private void FCFS()
@@ -150,14 +142,13 @@ namespace TaskManager
             int quantity = processes.Count;
             while (true)
             {
-                if (processes[pr].remainingTime == 0)
+                if (processes[pr].RemainingTime == 0)
                 {
-                    processes[pr].end(timeCount);
+                    processes[pr].End(timeCount);
                     pr++;
-                    // Nếu sai thì sửa ở đây
-                };
+                }
                 if (pr == quantity) break;
-                processes[pr].useCpu();
+                processes[pr].UseCpu();
                 cpu.Add(pr);
                 timeCount++;
             }
@@ -165,7 +156,7 @@ namespace TaskManager
 
         private void RR()
         {
-            List<Process> queue = new List<Process>();
+            List<Process> queue = new();
             int quantum = Convert.ToInt32(nupQuantum.Value);
             int r = quantum;
             int index = 0;
@@ -173,10 +164,9 @@ namespace TaskManager
             int processesLength = processes.Count;
             while (true)
             {
-                // Add process to queue
                 foreach (Process process in processes)
                 {
-                    if (process.arrivalTime == timeCount)
+                    if (process.ArrivalTime == timeCount)
                     {
                         queue.Add(process);
                         processesLength--;
@@ -185,16 +175,12 @@ namespace TaskManager
 
                 int queueLength = queue.Count;
 
-                if (queueLength == 0 && processesLength == 0)
-                {
-                    break;
-                }
+                if (queueLength == 0 && processesLength == 0) break;
                 if (queueLength > 0)
                 {
-                    if (queue[index].remainingTime <= 0)
+                    if (queue[index].RemainingTime <= 0)
                     {
-                        // Nếu sai thì sửa ở đây
-                        queue[index].end(timeCount);
+                        queue[index].End(timeCount);
                         r = quantum;
                         queue.Remove(queue[index]);
                         queueLength = queue.Count;
@@ -204,9 +190,7 @@ namespace TaskManager
                             continue;
                         }
                         if (index >= queueLength)
-                        {
                             index = queueLength - 1;
-                        }
                     }
 
                     if (r == 0)
@@ -216,25 +200,25 @@ namespace TaskManager
                         Console.WriteLine($"=> Round");
                     }
 
-                    queue[index].useCpu();
-                    cpu.Add(queue[index].id - 1);
+                    queue[index].UseCpu();
+                    cpu.Add(queue[index].Id - 1);
                     r--;
                 }
                 timeCount++;
             }
         }
+
         private void SJF()
         {
             int timeCount = 0;
-            List<Process> queue = new List<Process>();
+            List<Process> queue = new();
             int lengthProcesses = processes.Count;
             int index = -1;
             while (true)
             {
-                // Add process to queue
                 foreach (Process process in processes)
                 {
-                    if (process.arrivalTime == timeCount)
+                    if (process.ArrivalTime == timeCount)
                     {
                         queue.Add(process);
                         lengthProcesses--;
@@ -245,10 +229,10 @@ namespace TaskManager
                     double min = Double.PositiveInfinity;
                     foreach (Process process in queue)
                     {
-                        if (process.remainingTime < min && process.remainingTime > 0)
+                        if (process.RemainingTime < min && process.RemainingTime > 0)
                         {
-                            index = process.id - 1;
-                            min = process.remainingTime;
+                            index = process.Id - 1;
+                            min = process.RemainingTime;
                         }
                     }
                 }
@@ -257,28 +241,27 @@ namespace TaskManager
                 if (index != -1)
                 {
                     cpu.Add(index);
-                    processes[index].useCpu();
-                    if (processes[index].remainingTime == 0)
+                    processes[index].UseCpu();
+                    if (processes[index].RemainingTime == 0)
                     {
-                        // Nếu sai thì sửa ở đây
-                        processes[index].end(timeCount + 1);
+                        processes[index].End(timeCount + 1);
                         index = -1;
                     }
                 }
                 timeCount++;
             }
         }
+
         private void SRTN()
         {
             int timeCount = 0;
-            List<Process> queue = new List<Process>();
+            List<Process> queue = new();
             int lengthProcesses = processes.Count;
             while (true)
             {
-                // Add process to queue
                 foreach (Process process in processes)
                 {
-                    if (process.arrivalTime == timeCount)
+                    if (process.ArrivalTime == timeCount)
                     {
                         queue.Add(process);
                         lengthProcesses--;
@@ -288,69 +271,69 @@ namespace TaskManager
                 int index = -1;
                 foreach (Process p in queue)
                 {
-                    if (p.remainingTime > 0 && p.remainingTime < min)
+                    if (p.RemainingTime > 0 && p.RemainingTime < min)
                     {
-                        index = p.id;
-                        min = p.remainingTime;
+                        index = p.Id;
+                        min = p.RemainingTime;
                     }
                 }
 
                 if (index == -1 && lengthProcesses == 0) break;
                 if (index != -1)
                 {
-                    processes[index - 1].useCpu();
+                    processes[index - 1].UseCpu();
                     cpu.Add(index - 1);
-                    if (processes[index - 1].remainingTime == 0)
-                    {
-                        processes[index - 1].end(timeCount + 1);
-                    }
+                    if (processes[index - 1].RemainingTime == 0)
+                        processes[index - 1].End(timeCount + 1);
                 }
-
                 timeCount++;
             }
         }
-        // Draw Gantt Chart
-        private void DisplayProcesses()
+
+        private void DisplayGanttChart()
         {
             pnlTurnAroundTime.Controls.Clear();
-
             int x = 0;
             int y = 0;
             int height = 50;
             foreach (int i in cpu)
             {
-                Panel processPanel = new Panel();
-                processPanel.Location = new Point(x, y);
-                processPanel.Size = new Size(40, height);
-                processPanel.BackColor = processes[i].color;
-                processPanel.BorderStyle = BorderStyle.FixedSingle;
+                Panel processPanel = new()
+                {
+                    Location = new Point(x, y),
+                    Size = new Size(50, height),
+                    BackColor = processes[i].Color,
+                    BorderStyle = BorderStyle.FixedSingle
+                };
 
-                Label processLabel = new Label();
-                processLabel.Text = $"P{processes[i].id}";
-                processLabel.Font = new Font("Arial", 10);
-                processLabel.ForeColor = Color.Black;
-                processLabel.TextAlign = ContentAlignment.MiddleCenter;
-                processLabel.Dock = DockStyle.Fill;
+                Label processLabel = new()
+                {
+                    Text = $"P{processes[i].Id}",
+                    Font = new Font("Consolas", 13),
+                    ForeColor = Color.Black,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Dock = DockStyle.Fill
+                };
 
                 processPanel.Controls.Add(processLabel);
                 pnlTurnAroundTime.Controls.Add(processPanel);
 
-                x += 40;
+                x += 50;
             }
         }
 
         private void DisplayResult()
         {
-            processes = processes.OrderBy(process => process.arrivalTime).ToList();
+            processes = processes.OrderBy(process => process.ArrivalTime).ToList();
             int totalWaitingTime = 0;
             foreach (Process p in processes)
             {
-                int index = p.id;
-                int arrivalTime = p.arrivalTime;
-                int burstTime = p.burstTime;
-                int completedTime = p.completedTime;
-                int turnAroundTime = p.turnAroundTime;
-                int waitingTime = p.waitingTime;
+                int index = p.Id;
+                int arrivalTime = p.ArrivalTime;
+                int burstTime = p.BurstTime;
+                int completedTime = p.CompletedTime;
+                int turnAroundTime = p.TurnAroundTime;
+                int waitingTime = p.WaitingTime;
                 totalWaitingTime += waitingTime;
                 dataGridView2.Rows.Add(index, arrivalTime, burstTime, completedTime, turnAroundTime, waitingTime);
             }

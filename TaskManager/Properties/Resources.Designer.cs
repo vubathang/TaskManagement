@@ -63,6 +63,16 @@ namespace TaskManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CSE {
+            get {
+                object obj = ResourceManager.GetObject("CSE", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap TLU_image {
             get {
                 object obj = ResourceManager.GetObject("TLU_image", resourceCulture);
