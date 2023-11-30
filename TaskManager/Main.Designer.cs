@@ -90,11 +90,6 @@
             schedulingAlgorithmToolStripMenuItem.Text = "Scheduling Algorithms";
             schedulingAlgorithmToolStripMenuItem.Click += schedulingAlgorithmToolStripMenuItem_Click;
             // 
-            // chatToolStripMenuItem
-            // 
-            chatToolStripMenuItem.Name = "chatToolStripMenuItem";
-            chatToolStripMenuItem.Size = new Size(371, 32);
-            chatToolStripMenuItem.Text = "Chat";
             // 
             // label1
             // 
