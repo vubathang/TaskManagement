@@ -34,19 +34,12 @@ namespace TaskManager
             this.Show();
         }
 
-        //private void chatToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    Color backgroundColor = Color.FromArgb(0x4f, 0x5b, 0x62);
-        //    Form loginForm = new Login(backgroundColor);
-
-        //    // Ẩn form hiện tại trước khi hiển thị form đăng nhập
-        //    this.Hide();
-
-        //    // Hiển thị form đăng nhập dưới dạng dialog
-        //    loginForm.ShowDialog();
-
-        //    // Hiện lại form sau khi form đăng nhập đóng lại
-        //    this.Show();
-        //}
+        private void chatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form loginForm = new Login();
+            this.Hide();
+            loginForm.ShowDialog();
+            this.Show();
+        }
     }
 }

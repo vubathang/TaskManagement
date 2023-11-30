@@ -33,7 +33,7 @@
             taskManagerToolStripMenuItem = new ToolStripMenuItem();
             chapter02ToolStripMenuItem = new ToolStripMenuItem();
             schedulingAlgorithmToolStripMenuItem = new ToolStripMenuItem();
-            //chatToolStripMenuItem = new ToolStripMenuItem();
+            chatToolStripMenuItem = new ToolStripMenuItem();
             label1 = new Label();
             pictureBox1 = new PictureBox();
             label3 = new Label();
@@ -77,12 +77,11 @@
             // 
             // chapter02ToolStripMenuItem
             // 
-            chapter02ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { schedulingAlgorithmToolStripMenuItem});
+            chapter02ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { schedulingAlgorithmToolStripMenuItem, chatToolStripMenuItem });
             chapter02ToolStripMenuItem.Font = new Font("Consolas", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
             chapter02ToolStripMenuItem.Name = "chapter02ToolStripMenuItem";
             chapter02ToolStripMenuItem.Size = new Size(181, 37);
             chapter02ToolStripMenuItem.Text = "Chapter 02";
-            //chapter02ToolStripMenuItem.Click += chatToolStripMenuItem_Click;
             // 
             // schedulingAlgorithmToolStripMenuItem
             // 
@@ -93,10 +92,10 @@
             // 
             // chatToolStripMenuItem
             // 
-            //chatToolStripMenuItem.Name = "chatToolStripMenuItem";
-            //chatToolStripMenuItem.Size = new Size(435, 42);
-            //chatToolStripMenuItem.Text = "Chat";
-            //chatToolStripMenuItem.Click += chatToolStripMenuItem_Click;
+            chatToolStripMenuItem.Name = "chatToolStripMenuItem";
+            chatToolStripMenuItem.Size = new Size(435, 42);
+            chatToolStripMenuItem.Text = "Chat";
+            chatToolStripMenuItem.Click += chatToolStripMenuItem_Click;
             // 
             // label1
             // 
@@ -236,5 +235,6 @@
         private Label label6;
         private GroupBox groupBox1;
         private PictureBox pictureBox2;
+        private ToolStripMenuItem chatToolStripMenuItem;
     }
 }
