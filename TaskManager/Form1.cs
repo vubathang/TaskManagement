@@ -133,21 +133,21 @@ namespace TaskManager
                     bool terminated = TerminateProcess(processHandle, 0);
                     if (terminated)
                     {
-                        MessageBox.Show("Tiến trình kết thúc thành công.");
+                        MessageBox.Show("The process has successfully terminated");
                     }
                     else
                     {
-                        MessageBox.Show("Không thể kết thúc tiến trình.");
+                        MessageBox.Show("Unable to terminate the process");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Không thể mở tiến trình.");
+                    MessageBox.Show("Unable to start the process");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message);
+                MessageBox.Show("Error: " + ex.Message);
             }
         }
 
@@ -191,12 +191,12 @@ namespace TaskManager
 
             if (success)
             {
-                return string.Format("Dung lượng tổng của ổ {0}: {1} bytes\nDung lượng trống của ổ {0}: {2} bytes\nDung lượng sử dụng của ổ {0}: {3} bytes",
-                    driveName, totalNumberOfBytes, totalNumberOfFreeBytes, totalNumberOfBytes - totalNumberOfFreeBytes);
+                return string.Format("Total capacity of the disk {0}: {1} GB\nFree capacity of the disk {0}: {2} GB\nUsed capacity of the disk {0}: {3} GB",
+                                       driveName, totalNumberOfBytes / (1024 * 1024 * 1024), totalNumberOfFreeBytes / (1024 * 1024 * 1024), (totalNumberOfBytes - totalNumberOfFreeBytes) / (1024 * 1024 * 1024));
             }
             else
             {
-                return string.Format("Không thể lấy thông số Disk của ổ {0}", driveName);
+                return string.Format("Unable to retrieve disk parameters {0}", driveName);
             }
         }
         #endregion
@@ -218,7 +218,7 @@ namespace TaskManager
             }
             catch (Exception)
             {
-                MessageBox.Show("Lỗi");
+                MessageBox.Show("Error");
             };
         }
 
@@ -270,9 +270,8 @@ namespace TaskManager
                     bool success = setProcessPriority(processHandle, comboBox1.Text);
                     if (!success)
                     {
-                        // Lấy mã lỗi từ GetLastError
                         int errorCode = Marshal.GetLastWin32Error();
-                        MessageBox.Show($"Không thể thay đổi priority. Mã lỗi: {errorCode}");
+                        MessageBox.Show($"Unable to change priority. Error code: {errorCode}");
                     }
                     else
                     {
@@ -314,7 +313,7 @@ namespace TaskManager
 
         private void btnDisk_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(ShowDiskInfo("C:\\"), "Thông số Disk");
+            MessageBox.Show(ShowDiskInfo("C:\\"), "Disk");
         }
     }
 }
