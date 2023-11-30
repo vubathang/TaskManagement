@@ -64,7 +64,7 @@
             txbUsername.Location = new Point(230, 201);
             txbUsername.Name = "txbUsername";
             txbUsername.Size = new Size(299, 40);
-            txbUsername.TabIndex = 3;
+            txbUsername.TabIndex = 1;
             // 
             // label3
             // 
@@ -80,14 +80,14 @@
             txbPort.Location = new Point(230, 265);
             txbPort.Name = "txbPort";
             txbPort.Size = new Size(299, 40);
-            txbPort.TabIndex = 3;
+            txbPort.TabIndex = 2;
             // 
             // btnLogin
             // 
             btnLogin.Location = new Point(194, 338);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(160, 60);
-            btnLogin.TabIndex = 4;
+            btnLogin.TabIndex = 3;
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = true;
             btnLogin.Click += btnLogin_Click;
@@ -104,7 +104,7 @@
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.icons8_chat1;
-            pictureBox1.Location = new Point(208, 29);
+            pictureBox1.Location = new Point(219, 29);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(111, 97);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -113,6 +113,7 @@
             // 
             // Login
             // 
+            AcceptButton = btnLogin;
             AutoScaleDimensions = new SizeF(16F, 37F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.GradientActiveCaption;

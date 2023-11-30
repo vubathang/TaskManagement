@@ -20,6 +20,7 @@ namespace TaskManager.ChatApp
             lbName.Text = name;
             lbPort.Text = port;
             RenderChat();
+            //this.KeyDown += new KeyEventHandler(Client_KeyDown);
         }
 
         private void RenderChat()
@@ -39,9 +40,22 @@ namespace TaskManager.ChatApp
 
         }
 
-        private void btnSent_Click(object sender, EventArgs e)
+        //private void Client_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.KeyCode == Keys.Enter)
+        //    {
+        //        // Xử lý sự kiện khi nhấn Enter
+        //        // Ở đây bạn có thể thực hiện các thao tác mong muốn với PictureBox
+        //        pictureBox2.Image = Properties.Resources.Send;// Đặt hình ảnh mới hoặc thực hiện hành động mong muốn
+        //        e.SuppressKeyPress = true;
+        //    }
+        //    richTextBox1.Text += $"Me\t: \"{txbMessage.Text}\"\n";
+        //    txbMessage.Text = "";
+        //}
+
+        private void btnSend_Click(object sender, EventArgs e)
         {
-            richTextBox1.Text += $"me\t: \"{txbMessage.Text}\"\n";
+            richTextBox1.Text += $"Me\t: \"{txbMessage.Text}\"\n";
             txbMessage.Text = "";
         }
     }
