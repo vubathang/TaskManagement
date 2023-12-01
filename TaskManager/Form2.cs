@@ -335,7 +335,7 @@ namespace TaskManager
                 int turnAroundTime = p.TurnAroundTime;
                 int waitingTime = p.WaitingTime;
                 totalWaitingTime += waitingTime;
-                dataGridView2.Rows.Add(index, arrivalTime, burstTime, completedTime, turnAroundTime, waitingTime);
+                dataGridView2.Rows.Add(index, arrivalTime, burstTime, completedTime, $"{completedTime} - {arrivalTime} = {turnAroundTime}", $"{turnAroundTime} - {burstTime} = {waitingTime}");
             }
             txtAvgWaitingTime.Text = Math.Round(totalWaitingTime * 1.0 / processes.Count, 4).ToString();
         }
