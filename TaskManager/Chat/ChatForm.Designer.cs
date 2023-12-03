@@ -69,6 +69,7 @@
             // 
             AutoScaleDimensions = new SizeF(15F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.GradientActiveCaption;
             ClientSize = new Size(482, 253);
             Controls.Add(label1);
             Controls.Add(btnClient);

@@ -75,7 +75,7 @@
             dataGridView1.RowTemplate.Height = 29;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(477, 513);
-            dataGridView1.TabIndex = 0;
+            dataGridView1.TabIndex = 9;
             dataGridView1.CellClick += dataGridView1_CellClick;
             // 
             // Column1
@@ -102,7 +102,7 @@
             btnEnd.Margin = new Padding(4, 3, 4, 3);
             btnEnd.Name = "btnEnd";
             btnEnd.Size = new Size(109, 50);
-            btnEnd.TabIndex = 1;
+            btnEnd.TabIndex = 3;
             btnEnd.Text = "End";
             btnEnd.UseVisualStyleBackColor = true;
             btnEnd.Click += btnEnd_Click;
@@ -115,7 +115,7 @@
             btnStart.Margin = new Padding(4, 3, 4, 3);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(109, 48);
-            btnStart.TabIndex = 1;
+            btnStart.TabIndex = 2;
             btnStart.Text = "Start";
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += btnStart_Click;
@@ -128,7 +128,7 @@
             txtName.Margin = new Padding(4, 3, 4, 3);
             txtName.Name = "txtName";
             txtName.Size = new Size(231, 39);
-            txtName.TabIndex = 2;
+            txtName.TabIndex = 1;
             // 
             // btnPriority
             // 
@@ -138,7 +138,7 @@
             btnPriority.Margin = new Padding(4, 3, 4, 3);
             btnPriority.Name = "btnPriority";
             btnPriority.Size = new Size(237, 48);
-            btnPriority.TabIndex = 3;
+            btnPriority.TabIndex = 4;
             btnPriority.Text = "Set priority";
             btnPriority.UseVisualStyleBackColor = true;
             btnPriority.Click += btnPriority_Click;
@@ -153,7 +153,7 @@
             comboBox1.Margin = new Padding(4, 3, 4, 3);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(237, 35);
-            comboBox1.TabIndex = 4;
+            comboBox1.TabIndex = 5;
             // 
             // txtSearch
             // 
@@ -163,7 +163,7 @@
             txtSearch.Margin = new Padding(4, 3, 4, 3);
             txtSearch.Name = "txtSearch";
             txtSearch.Size = new Size(231, 39);
-            txtSearch.TabIndex = 2;
+            txtSearch.TabIndex = 0;
             txtSearch.TextChanged += txtSearch_TextChanged;
             // 
             // btnCPU
@@ -187,7 +187,7 @@
             btnRemory.Margin = new Padding(4, 3, 4, 3);
             btnRemory.Name = "btnRemory";
             btnRemory.Size = new Size(140, 48);
-            btnRemory.TabIndex = 6;
+            btnRemory.TabIndex = 8;
             btnRemory.Text = "Memory";
             btnRemory.UseVisualStyleBackColor = true;
             btnRemory.Click += btnMemory_Click;
@@ -200,7 +200,7 @@
             btnDisk.Margin = new Padding(4, 3, 4, 3);
             btnDisk.Name = "btnDisk";
             btnDisk.Size = new Size(136, 48);
-            btnDisk.TabIndex = 6;
+            btnDisk.TabIndex = 7;
             btnDisk.Text = "Disk";
             btnDisk.UseVisualStyleBackColor = true;
             btnDisk.Click += btnDisk_Click;

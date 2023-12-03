@@ -3,7 +3,7 @@
     public partial class ChatForm : Form
     {
         private Thread serverThread;
-        private Thread clientThread;
+        private ServerForm serverForm;
 
         public ChatForm()
         {
@@ -14,12 +14,17 @@
         {
             try
             {
-                serverThread = new Thread(StartServer);
-                serverThread.Start();
+                if (serverForm == null || serverForm.IsDisposed)
+                {
+                    serverThread = new Thread(StartServer);
+                    serverThread.Start();
+                }
+                else
+                    MessageBox.Show("Server is already running.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error starting server: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error starting server: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -27,11 +32,13 @@
         {
             try
             {
-                Application.Run(new ServerForm());
+                serverForm = new ServerForm();
+                serverForm.Show(); 
+                Application.Run();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error in server operation: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error in server operation: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -39,24 +46,22 @@
         {
             try
             {
-                clientThread = new Thread(StartClient);
-                clientThread.Start();
+                if (serverForm == null || serverForm.IsDisposed)
+                {
+                    MessageBox.Show("Server is not running.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                using LoginForm loginForm = new();
+                if (loginForm.ShowDialog() == DialogResult.OK)
+                {
+                    string username = loginForm.Username;
+                    ClientForm clientForm = new(serverForm, username);
+                    clientForm.Show();
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error starting client: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void StartClient()
-        {
-            try
-            {
-                Application.Run(new ClientForm());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error in client operation: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error starting client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
