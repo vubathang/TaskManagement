@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using TaskManager.ChatApp;
+﻿using TaskManager.Chat;
 
 namespace TaskManager
 {
@@ -21,25 +12,25 @@ namespace TaskManager
         private void schedulingAlgorithmToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form taskManager = new Form2();
-            this.Hide();
+            Hide();
             taskManager.ShowDialog();
-            this.Show();
+            Show();
         }
 
         private void OpenTaskManager(object sender, EventArgs e)
         {
             Form taskManager = new Form1();
-            this.Hide();
+            Hide();
             taskManager.ShowDialog();
-            this.Show();
+            Show();
         }
 
         private void chatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form loginForm = new Login();
-            this.Hide();
-            loginForm.ShowDialog();
-            this.Show();
+            Form chat = new ChatForm();
+            Hide();
+            chat.ShowDialog();
+            Show();
         }
     }
 }
