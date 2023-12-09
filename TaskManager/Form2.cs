@@ -10,7 +10,6 @@ namespace TaskManager
         int timeCount = 0;
         int processesLength = 0;
         int quantum = 0;
-
         public class Process
         {
             public int Id { get; set; }
@@ -118,7 +117,6 @@ namespace TaskManager
             }
             else
                 MessageBox.Show("Please input data", "Notification", MessageBoxButtons.OK);
-
         }
 
         private void cbAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
@@ -137,7 +135,7 @@ namespace TaskManager
             dataGridView2.Rows.Clear();
             txtAvgWaitingTime.Clear();
         }
-
+        
         private void AddProcessToList()
         {
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
@@ -176,45 +174,6 @@ namespace TaskManager
                         queue.Remove(queue[0]);
                     }
                 }
-                timeCount++;
-            }
-        }
-
-        private void RR()
-        {
-            int r = quantum;
-            while (true)
-            {
-                foreach (Process process in processes)
-                {
-                    if (process.ArrivalTime == timeCount)
-                    {
-                        queue.Add(process);
-                        processesLength--;
-                    }
-                }
-
-                if (queue.Count > 0)
-                {
-                    if (r == 0)
-                    {
-                        r = quantum;
-                        queue.Add(queue[0]);
-                        queue.Remove(queue[0]);
-                    }
-                    queue[0].UseCpu();
-                    cpu.Add(queue[0].Id);
-                    r--;
-                    if (queue[0].RemainingTime == 0)
-                    {
-                        r = quantum;
-                        queue[0].End(timeCount + 1);
-                        queue.Remove(queue[0]);
-                    }
-
-                }
-                else if (processesLength == 0) break;
-
                 timeCount++;
             }
         }
@@ -259,7 +218,6 @@ namespace TaskManager
             }
         }
 
-
         private void SRTN()
         {
             while (true)
@@ -303,67 +261,67 @@ namespace TaskManager
 
             foreach (int i in cpu)
             {
-                // Add panel for the process
-                Panel processPanel = new()
-                {
-                    Location = new Point(x, y),
-                    Size = new Size(60, height),
-                    BackColor = processes[i].Color,
-                    BorderStyle = BorderStyle.None
-                };
+              // Add panel for the process
+              Panel processPanel = new()
+              {
+                  Location = new Point(x, y),
+                  Size = new Size(60, height),
+                  BackColor = processes[i].Color,
+                  BorderStyle = BorderStyle.None
+              };
 
-                // Check if the current process is different from the previous one
-                if (previousProcessId != processes[i].Id)
-                {
-                    // Add label with process name to the process panel
-                    Label processLabel = new()
-                    {
-                        Text = $"P{processes[i].Id + 1}",
-                        Font = new Font("Consolas", 15),
-                        ForeColor = Color.Black,
-                        TextAlign = ContentAlignment.MiddleCenter,
-                        Dock = DockStyle.Fill
-                    };
+              // Check if the current process is different from the previous one
+              if (previousProcessId != processes[i].Id)
+              {
+                  // Add label with process name to the process panel
+                  Label processLabel = new()
+                  {
+                      Text = $"P{processes[i].Id + 1}",
+                       Font = new Font("Consolas", 15),
+                      ForeColor = Color.Black,
+                      TextAlign = ContentAlignment.MiddleCenter,
+                      Dock = DockStyle.Fill
+                  };
 
-                    processPanel.Controls.Add(processLabel);
-                    pnlTurnAroundTime.Controls.Add(processPanel);
-                }
-                else
-                {
-                    pnlTurnAroundTime.Controls.Add(processPanel);
-                }
+                  processPanel.Controls.Add(processLabel);
+                  pnlTurnAroundTime.Controls.Add(processPanel);
+              }
+              else
+              {
+                  pnlTurnAroundTime.Controls.Add(processPanel);
+              }
 
-                // Check if the current process is different from the previous one
-                if (previousProcessId != processes[i].Id)
-                {
-                    // Add a time panel below the process panel
-                    Panel timePanel = new()
-                    {
-                        Location = new Point(x, y + height),
-                        Size = new Size(60, height),
-                        BackColor = Color.White,
-                        BorderStyle = BorderStyle.None
-                    };
+              // Check if the current process is different from the previous one
+              if (previousProcessId != processes[i].Id)
+              {
+                  // Add a time panel below the process panel
+                  Panel timePanel = new()
+                  {
+                      Location = new Point(x, y + height),
+                      Size = new Size(60, height),
+                      BackColor = Color.White,
+                      BorderStyle = BorderStyle.None
+                  };
 
-                    // Add label with execution time to the time panel
-                    Label timeLabel = new()
-                    {
-                        Text = $"{currentTime}",
-                        Font = new Font("Consolas", 15),
-                        ForeColor = Color.Black,
-                        TextAlign = ContentAlignment.TopLeft,
-                        Dock = DockStyle.Fill
-                    };
+                  // Add label with execution time to the time panel
+                  Label timeLabel = new()
+                  {
+                      Text = $"{currentTime}",
+                      Font = new Font("Consolas", 15),
+                      ForeColor = Color.Black,
+                      TextAlign = ContentAlignment.TopLeft,
+                      Dock = DockStyle.Fill
+                  };
 
-                    timePanel.Controls.Add(timeLabel);
-                    pnlTurnAroundTime.Controls.Add(timePanel);
-                }
+                  timePanel.Controls.Add(timeLabel);
+                  pnlTurnAroundTime.Controls.Add(timePanel);
+              } 
 
-                x += 60;
+              x += 60;
 
-                // Update the previous process id
-                previousProcessId = processes[i].Id;
-                currentTime++;
+              // Update the previous process id
+              previousProcessId = processes[i].Id;
+              currentTime++;                                              
             }
 
             // Add the final time panel
