@@ -201,7 +201,7 @@
             pnlTurnAroundTime.Dock = DockStyle.Fill;
             pnlTurnAroundTime.Location = new Point(3, 30);
             pnlTurnAroundTime.Name = "pnlTurnAroundTime";
-            pnlTurnAroundTime.Size = new Size(1070, 92);
+            pnlTurnAroundTime.Size = new Size(1070, 113);
             pnlTurnAroundTime.TabIndex = 7;
             // 
             // nupQuantum
@@ -218,9 +218,9 @@
             // 
             groupBox1.Controls.Add(pnlTurnAroundTime);
             groupBox1.Font = new Font("Consolas", 13.8F, FontStyle.Regular, GraphicsUnit.Point);
-            groupBox1.Location = new Point(25, 385);
+            groupBox1.Location = new Point(25, 375);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1076, 125);
+            groupBox1.Size = new Size(1076, 146);
             groupBox1.TabIndex = 12;
             groupBox1.TabStop = false;
             groupBox1.Text = "Gantt Chart";
@@ -349,6 +349,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(1129, 899);
             Controls.Add(groupBox5);
             Controls.Add(groupBox4);
