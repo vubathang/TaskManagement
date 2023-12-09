@@ -6,10 +6,11 @@ namespace TaskManager
     {
         List<Process> processes = new();
         List<Process> queue = new();
-        List<int> cpu = new();
+        readonly List<int> cpu = new();
         int timeCount = 0;
         int processesLength = 0;
         int quantum = 0;
+
         public class Process
         {
             public int Id { get; set; }
@@ -30,20 +31,24 @@ namespace TaskManager
                 Random rand = new();
                 Color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
             }
+
             public void UseCpu()
             {
                 RemainingTime--;
             }
+
             public void End(int timeCount)
             {
                 CompletedTime = timeCount;
                 CalTurnAroundTime();
                 CalWaitingTime();
             }
+
             public void CalTurnAroundTime()
             {
                 TurnAroundTime = CompletedTime - ArrivalTime;
             }
+
             public void CalWaitingTime()
             {
                 WaitingTime = TurnAroundTime - BurstTime;
@@ -62,7 +67,6 @@ namespace TaskManager
             cbAlgorithm.Items.Add("RR");
             cbAlgorithm.Items.Add("SJF");
             cbAlgorithm.Items.Add("SRTN");
-
             cbAlgorithm.SelectedIndex = 0;
         }
 
@@ -113,18 +117,14 @@ namespace TaskManager
                 DisplayResult();
             }
             else
-            {
                 MessageBox.Show("Please input data", "Notification", MessageBoxButtons.OK);
-            }
 
         }
 
         private void cbAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbAlgorithm.SelectedIndex == 1)
-                groupBox4.Show();
-            else
-                groupBox4.Hide();
+            if (cbAlgorithm.SelectedIndex == 1) groupBox4.Show();
+            else groupBox4.Hide();
         }
 
         private void Init()
@@ -137,6 +137,7 @@ namespace TaskManager
             dataGridView2.Rows.Clear();
             txtAvgWaitingTime.Clear();
         }
+
         private void AddProcessToList()
         {
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
@@ -231,13 +232,13 @@ namespace TaskManager
                         processesLength--;
                     }
                 }
-                
+
                 if (queue.Count > 0)
                 {
                     if (isFirstArrival)
                     {
                         queue = queue.OrderBy(p => p.BurstTime).ToList();
-                        isFirstArrival = false; 
+                        isFirstArrival = false;
                     }
                     queue[0].UseCpu();
                     cpu.Add(queue[0].Id);
@@ -245,14 +246,19 @@ namespace TaskManager
                     {
                         queue[0].End(timeCount + 1);
                         queue.Remove(queue[0]);
-                        queue = queue.OrderBy(p => p.BurstTime).ToList();
+                        if (queue.Count > 0)
+                            queue = queue.OrderBy(p => p.BurstTime).ToList();
                     }
                 }
-                else if (processesLength == 0) break;
+                else if (processesLength == 0)
+                {
+                    break;
+                }
 
                 timeCount++;
             }
         }
+
 
         private void SRTN()
         {
@@ -291,30 +297,96 @@ namespace TaskManager
             int x = 0;
             int y = 0;
             int height = 50;
+            pnlTurnAroundTime.Padding = new Padding(0, height, 0, 0);
+            int previousProcessId = -1;
+            int currentTime = processes[cpu[0]].ArrivalTime;
+
             foreach (int i in cpu)
             {
+                // Add panel for the process
                 Panel processPanel = new()
                 {
                     Location = new Point(x, y),
-                    Size = new Size(50, height),
+                    Size = new Size(60, height),
                     BackColor = processes[i].Color,
-                    BorderStyle = BorderStyle.FixedSingle
+                    BorderStyle = BorderStyle.None
                 };
 
-                Label processLabel = new()
+                // Check if the current process is different from the previous one
+                if (previousProcessId != processes[i].Id)
                 {
-                    Text = $"P{processes[i].Id + 1}",
-                    Font = new Font("Consolas", 13),
-                    ForeColor = Color.Black,
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Dock = DockStyle.Fill
-                };
+                    // Add label with process name to the process panel
+                    Label processLabel = new()
+                    {
+                        Text = $"P{processes[i].Id + 1}",
+                        Font = new Font("Consolas", 15),
+                        ForeColor = Color.Black,
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        Dock = DockStyle.Fill
+                    };
 
-                processPanel.Controls.Add(processLabel);
-                pnlTurnAroundTime.Controls.Add(processPanel);
+                    processPanel.Controls.Add(processLabel);
+                    pnlTurnAroundTime.Controls.Add(processPanel);
+                }
+                else
+                {
+                    pnlTurnAroundTime.Controls.Add(processPanel);
+                }
 
-                x += 50;
+                // Check if the current process is different from the previous one
+                if (previousProcessId != processes[i].Id)
+                {
+                    // Add a time panel below the process panel
+                    Panel timePanel = new()
+                    {
+                        Location = new Point(x, y + height),
+                        Size = new Size(60, height),
+                        BackColor = Color.White,
+                        BorderStyle = BorderStyle.None
+                    };
+
+                    // Add label with execution time to the time panel
+                    Label timeLabel = new()
+                    {
+                        Text = $"{currentTime}",
+                        Font = new Font("Consolas", 15),
+                        ForeColor = Color.Black,
+                        TextAlign = ContentAlignment.TopLeft,
+                        Dock = DockStyle.Fill
+                    };
+
+                    timePanel.Controls.Add(timeLabel);
+                    pnlTurnAroundTime.Controls.Add(timePanel);
+                }
+
+                x += 60;
+
+                // Update the previous process id
+                previousProcessId = processes[i].Id;
+                currentTime++;
             }
+
+            // Add the final time panel
+            Panel finalTimePanel = new()
+            {
+                Location = new Point(x, y + height),
+                Size = new Size(60, height),
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.None
+            };
+
+            // Add label with execution time to the final time panel
+            Label finalTimeLabel = new()
+            {
+                Text = $"{timeCount}",
+                Font = new Font("Consolas", 15),
+                ForeColor = Color.Black,
+                TextAlign = ContentAlignment.TopLeft,
+                Dock = DockStyle.Fill
+            };
+
+            finalTimePanel.Controls.Add(finalTimeLabel);
+            pnlTurnAroundTime.Controls.Add(finalTimePanel);
         }
 
         private void DisplayResult()
@@ -332,7 +404,7 @@ namespace TaskManager
                 totalWaitingTime += waitingTime;
                 dataGridView2.Rows.Add(index, arrivalTime, burstTime, completedTime, $"{completedTime} - {arrivalTime} = {turnAroundTime}", $"{turnAroundTime} - {burstTime} = {waitingTime}");
             }
-            txtAvgWaitingTime.Text = Math.Round(totalWaitingTime * 1.0 / processes.Count, 4).ToString();
+            txtAvgWaitingTime.Text = Math.Round(totalWaitingTime * 1.0 / processes.Count, 3).ToString();
         }
     }
 }
