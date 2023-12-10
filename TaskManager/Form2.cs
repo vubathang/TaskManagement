@@ -180,7 +180,7 @@ namespace TaskManager
 
         private void RR()
         {
-            int r = (int)nupQuantum.Value;
+            int r = quantum;
             while(true)
             {
                 foreach (Process process in processes)
@@ -195,7 +195,7 @@ namespace TaskManager
                 {
                     if (r == 0)
                     {
-                        r = (int)nupQuantum.Value;
+                        r = quantum;
                         queue.Add(queue[0]);
                         queue.Remove(queue[0]);
                     }
@@ -205,7 +205,7 @@ namespace TaskManager
                     {
                         queue[0].End(timeCount + 1);
                         queue.Remove(queue[0]);
-                        r = (int)nupQuantum.Value;
+                        r = quantum;
                     }
                     else r--;
                 }
