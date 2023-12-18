@@ -34,6 +34,8 @@
             chapter02ToolStripMenuItem = new ToolStripMenuItem();
             schedulingAlgorithmToolStripMenuItem = new ToolStripMenuItem();
             chatToolStripMenuItem = new ToolStripMenuItem();
+            chapter03ToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripMenuItem();
             label1 = new Label();
             pictureBox1 = new PictureBox();
             label3 = new Label();
@@ -52,11 +54,11 @@
             // 
             menuStrip1.Font = new Font("Cascadia Mono", 12F, FontStyle.Bold, GraphicsUnit.Point);
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { chapter01ToolStripMenuItem, chapter02ToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { chapter01ToolStripMenuItem, chapter02ToolStripMenuItem, chapter03ToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(9, 2, 0, 2);
-            menuStrip1.Size = new Size(945, 41);
+            menuStrip1.Size = new Size(945, 35);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -65,14 +67,14 @@
             chapter01ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { taskManagerToolStripMenuItem });
             chapter01ToolStripMenuItem.Font = new Font("Consolas", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
             chapter01ToolStripMenuItem.Name = "chapter01ToolStripMenuItem";
-            chapter01ToolStripMenuItem.Size = new Size(181, 37);
+            chapter01ToolStripMenuItem.Size = new Size(156, 31);
             chapter01ToolStripMenuItem.Text = "Chapter 01";
             // 
             // taskManagerToolStripMenuItem
             // 
             taskManagerToolStripMenuItem.Name = "taskManagerToolStripMenuItem";
-            taskManagerToolStripMenuItem.Size = new Size(300, 42);
-            taskManagerToolStripMenuItem.Text = "Task Manager";
+            taskManagerToolStripMenuItem.Size = new Size(293, 32);
+            taskManagerToolStripMenuItem.Text = "Task Management";
             taskManagerToolStripMenuItem.Click += OpenTaskManager;
             // 
             // chapter02ToolStripMenuItem
@@ -80,28 +82,43 @@
             chapter02ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { schedulingAlgorithmToolStripMenuItem, chatToolStripMenuItem });
             chapter02ToolStripMenuItem.Font = new Font("Consolas", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
             chapter02ToolStripMenuItem.Name = "chapter02ToolStripMenuItem";
-            chapter02ToolStripMenuItem.Size = new Size(181, 37);
+            chapter02ToolStripMenuItem.Size = new Size(156, 31);
             chapter02ToolStripMenuItem.Text = "Chapter 02";
             // 
             // schedulingAlgorithmToolStripMenuItem
             // 
             schedulingAlgorithmToolStripMenuItem.Name = "schedulingAlgorithmToolStripMenuItem";
-            schedulingAlgorithmToolStripMenuItem.Size = new Size(435, 42);
+            schedulingAlgorithmToolStripMenuItem.Size = new Size(371, 32);
             schedulingAlgorithmToolStripMenuItem.Text = "Scheduling Algorithms";
             schedulingAlgorithmToolStripMenuItem.Click += schedulingAlgorithmToolStripMenuItem_Click;
             // 
             // chatToolStripMenuItem
             // 
             chatToolStripMenuItem.Name = "chatToolStripMenuItem";
-            chatToolStripMenuItem.Size = new Size(435, 42);
-            chatToolStripMenuItem.Text = "Chat";
+            chatToolStripMenuItem.Size = new Size(371, 32);
+            chatToolStripMenuItem.Text = "Chat application";
             chatToolStripMenuItem.Click += chatToolStripMenuItem_Click;
+            // 
+            // chapter03ToolStripMenuItem
+            // 
+            chapter03ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem1 });
+            chapter03ToolStripMenuItem.Font = new Font("Consolas", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
+            chapter03ToolStripMenuItem.Name = "chapter03ToolStripMenuItem";
+            chapter03ToolStripMenuItem.Size = new Size(156, 31);
+            chapter03ToolStripMenuItem.Text = "Chapter 03";
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(358, 32);
+            toolStripMenuItem1.Text = "Deadlock Dectection ";
+            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // label1
             // 
             label1.Dock = DockStyle.Top;
             label1.Font = new Font("Consolas", 24F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(0, 41);
+            label1.Location = new Point(0, 35);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(945, 122);
@@ -127,7 +144,7 @@
             label3.Location = new Point(35, 49);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(215, 38);
+            label3.Size = new Size(180, 33);
             label3.TabIndex = 4;
             label3.Text = "Vũ Bá Thắng";
             // 
@@ -138,7 +155,7 @@
             label4.Location = new Point(35, 99);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(341, 38);
+            label4.Size = new Size(285, 33);
             label4.TabIndex = 4;
             label4.Text = "Trịnh Phương Huyền";
             // 
@@ -149,7 +166,7 @@
             label5.Location = new Point(35, 149);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(305, 38);
+            label5.Size = new Size(255, 33);
             label5.TabIndex = 4;
             label5.Text = "Nguyễn Duy Hoàng";
             // 
@@ -160,7 +177,7 @@
             label6.Location = new Point(35, 200);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(269, 38);
+            label6.Size = new Size(225, 33);
             label6.TabIndex = 4;
             label6.Text = "Phạm Quốc Toản";
             // 
@@ -173,11 +190,11 @@
             groupBox1.Controls.Add(label5);
             groupBox1.Dock = DockStyle.Left;
             groupBox1.Font = new Font("Consolas", 13.8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            groupBox1.Location = new Point(0, 163);
+            groupBox1.Location = new Point(0, 157);
             groupBox1.Margin = new Padding(4);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(4);
-            groupBox1.Size = new Size(366, 485);
+            groupBox1.Size = new Size(366, 491);
             groupBox1.TabIndex = 5;
             groupBox1.TabStop = false;
             groupBox1.Text = "Team 01 - 63TH3";
@@ -195,7 +212,7 @@
             // 
             // Main
             // 
-            AutoScaleDimensions = new SizeF(15F, 33F);
+            AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(945, 648);
             Controls.Add(groupBox1);
@@ -236,5 +253,7 @@
         private GroupBox groupBox1;
         private PictureBox pictureBox2;
         private ToolStripMenuItem chatToolStripMenuItem;
+        private ToolStripMenuItem chapter03ToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem1;
     }
 }

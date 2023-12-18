@@ -1,4 +1,5 @@
 ﻿using TaskManager.Chat;
+using TaskManager.Deadlock;
 
 namespace TaskManager
 {
@@ -30,6 +31,14 @@ namespace TaskManager
             Form chat = new ChatForm();
             Hide();
             chat.ShowDialog();
+            Show();
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Form d = new Detection();
+            Hide();
+            d.ShowDialog();
             Show();
         }
     }
