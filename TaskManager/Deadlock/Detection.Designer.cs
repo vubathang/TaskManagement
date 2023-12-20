@@ -46,6 +46,7 @@
             // 
             // dgvProcess
             // 
+            dgvProcess.AllowUserToAddRows = false;
             dgvProcess.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvProcess.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvProcess.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3 });
@@ -114,6 +115,7 @@
             btnRun.TabIndex = 2;
             btnRun.Text = "Run";
             btnRun.UseVisualStyleBackColor = true;
+            btnRun.Click += btnRun_Click;
             // 
             // groupBox1
             // 
